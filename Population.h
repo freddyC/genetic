@@ -5,26 +5,28 @@
 #include "Individual.h"
 #include <vector>
 #include <algorithm>
+#include <iostream>
+#include <memory>
 
 class Population {
 public:
-  Population() 
-    : indvs(100)
-  {}
+  Population()
+    : people(1)
+  {
+    std::generate(people.begin(), people.end(), [&] () {
+      std::shared_ptr<Individual> temp(new Individual);
+      return temp;
+    });
+  }
 
-  Population(int size) 
-    : indvs(size)
-  {}
 
+  void print();
 
 private:
-  std::vector<Individual> indvs;
 
+  std::vector<std::shared_ptr<Individual> > people;
 
 
 };
-
-
-
 
 #endif

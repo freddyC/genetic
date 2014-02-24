@@ -1,9 +1,6 @@
 Genetic Algorithm
 =======
 
-This is my first attempt at genetic algorithms.  I will be focusing on Mutation, Migration, and Culling
-
-
 The basic idea is:
 
 * Initialization - Create an initial population, this population is usually generated randomly and can be any size desired, from just a few individuals to thousands.
