@@ -20,7 +20,6 @@
   v = absoulte value
 */
 char Individual::getRandomFunction () {
-  std::vector<char> funcs = {'m', 'd', 'a', 's', 'i', 'c', 't', 'o', 'p', 'l', 'r', 'v', 'M', 'D', 'A', 'S', 'I', 'C', 'T', 'O', 'P', 'L', 'R', 'V'};
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(0, funcs.size() -1);
@@ -29,24 +28,39 @@ char Individual::getRandomFunction () {
 }
 
 void Individual::print () {
-  std::cout << "[\n";
-  std::for_each(operations.begin(), operations.end(), [=] (char val) {
-    std::cout << val << ", ";
-  });
-  std::cout << "\n]\n";
+  calculateFitness();
+  std::cout << score << std::endl;
 }
 
-void Individual::printCord(std::pair<double, double> &cord) {
-  std::cout << std::endl;
-  std::for_each(operations.begin(), operations.end(), [&] (char val) {
-    act(val, cord);
-  });
-  std::cout << " (" << cord.first << ", " << cord.second << ") ";
-  std::cout << std::endl;
+void Individual::calculateFitness () {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(-3, 3);
+
+  for (int i = 0; i < HEALTH_ITERATIONS; ++i) {
+    std::pair<double, double> cord;
+    cord.first = dis(gen);
+    cord.second = dis(gen);
+    std::for_each(operations.begin(), operations.end(), [&] (char val) {
+      act(val, cord);
+    });
+    score += timesInBuda(cord);
+  }
 }
+
+///////////////////////////////////
+// TODO: fix me
+///////////////////////////////////
+int Individual::timesInBuda(std::pair<double, double> cord) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, funcs.size() -1);
+  auto i = dis(gen);
+  return i;
+}
+///////////////////////////////////
 
 void Individual::act(char action, std::pair<double, double> &val) {
-  std::cout << "\nAction = " << action << " pair before action (" << val.first << ", " << val.second << ")\n";
   switch(action) {
     case 'm':
       multiply_x(val);
@@ -121,7 +135,6 @@ void Individual::act(char action, std::pair<double, double> &val) {
       absoulte_value_y(val);
       break;
   }
-  std::cout << "Val after Action (" << val.first << ", " << val.second << ")\n";
 }
 
 void Individual::multiply_x (std::pair<double, double> &val) {

@@ -8,10 +8,11 @@
 #include <iostream>
 #include <memory>
 
+const int POPULATION_SIZE = 100;
 class Population {
 public:
   Population()
-    : people(1)
+    : people(POPULATION_SIZE)
   {
     std::generate(people.begin(), people.end(), [&] () {
       std::shared_ptr<Individual> temp(new Individual);

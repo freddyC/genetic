@@ -9,12 +9,15 @@
 #include <cmath>
 
 const int OPERATIONS_LENGTH = 100;
+const int HEALTH_ITERATIONS = 100;
 
 class Individual {
 public:
 
   Individual()
-    : operations(OPERATIONS_LENGTH)
+    : score(0)
+    , operations(OPERATIONS_LENGTH)
+    , funcs({'m', 'd', 'a', 's', 'i', 'c', 't', 'o', 'p', 'l', 'r', 'v', 'M', 'D', 'A', 'S', 'I', 'C', 'T', 'O', 'P', 'L', 'R', 'V'})
   {
     std::generate(operations.begin(), operations.end(), [&] () {
       return getRandomFunction();
@@ -32,18 +35,20 @@ public:
     }
   }
 
+  void calculateFitness ();
+
   void print();
-  void printCord(std::pair<double, double> &cord);
 
 private:
   void act(char action, std::pair<double, double> &val);
   char getRandomFunction();
+  int timesInBuda(std::pair<double, double> cord);
 
-
-
+  int score;
   std::vector<char> operations;
+  std::vector<char> funcs;
 
-  // Arithmatic functions: If x is
+  // Operations
   void multiply_x (std::pair<double, double> &val);
   void multiply_y (std::pair<double, double> &val);
 
