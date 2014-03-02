@@ -23,11 +23,18 @@ public:
     });
   }
 
+  std::vector<char> migrationGet ();
+  void migrationSet (std::vector<char>);
 
   void print ();
   void cull ();
   void repopulate ();
+  std::shared_ptr<Individual> getBest ();
+  int size() { return people.size(); }
+
 private:
+
+  std::pair<std::vector<char>, int> getRandomFather ();
 
   std::vector<std::shared_ptr<Individual> > people;
   std::shared_ptr<Analyze> analyzer;

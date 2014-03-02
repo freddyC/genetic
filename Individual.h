@@ -1,5 +1,4 @@
 
-
 #ifndef _INDIVIDUAL_H_
 #define _INDIVIDUAL_H_
 
@@ -27,10 +26,17 @@ public:
 
   void calculateFitness ();
   void print ();
-  std::vector<char> mutation ();
+  std::vector<char> generatePerson (std::vector<char> father, int fatherScore);
+  void performActions(std::pair<double, double> &evalPoint) {
+    for(int i = 0; i < operations.size(); ++i) {
+      act(operations[i], evalPoint);
+    }
+  }
   int score;
 
 private:
+  std::vector<char> mutation ();
+  std::vector<char> crossover (std::vector<char> father, int fatherScore);
   void act(char action, std::pair<double, double> &val);
   char getRandomFunction();
   int timesInBuda(std::pair<double, double> cord);

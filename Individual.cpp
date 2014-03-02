@@ -32,7 +32,6 @@ Individual::Individual(std::shared_ptr<Analyze> a)
   });
 }
 
-
 Individual::Individual(std::shared_ptr<Analyze> a, std::vector<char> actions)
   : score(0)
   , operations(actions)
@@ -47,13 +46,11 @@ void Individual::setOperations (std::vector<char> v) {
   }
 }
 
-
-
 char Individual::getRandomFunction () {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(0, funcs.size() -1);
-  auto i = dis(gen);
+  int i = dis(gen);
   return funcs[i];
 }
 
@@ -82,19 +79,51 @@ int Individual::timesInBuda(std::pair<double, double> cord) {
   return analyzer->analyzePoint(cord.first, cord.second);
 }
 
+std::vector<char> Individual::generatePerson (std::vector<char> father, int fatherScore) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0, 1);
+  auto chance = dis(gen);
+  if (chance < 0.5) {
+    return mutation();
+  } else {
+    return crossover(father, fatherScore);
+  }
+}
+
 std::vector<char> Individual::mutation () {
   // a 10% chance of mutation
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_real_distribution<> dis(0, 1);
-  for (int i = 0; i < operations.size(); ++i) {
+  auto opersCopy = operations;
+  for (int i = 0; i < opersCopy.size(); ++i) {
     auto chance = dis(gen);
     if (chance < 0.9) {
-      operations[i] = getRandomFunction();
+      opersCopy[i] = getRandomFunction();
     }
   }
-  return operations;
+  return opersCopy;
 }
+
+std::vector<char> Individual::crossover (std::vector<char> father, int fatherScore) {
+  // a 70% chance of taking better score's gene
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0, 1);
+  auto child = father;
+  bool goodDad = true;
+  for (int i = 0; i < child.size(); ++i) {
+    auto chance = dis(gen);
+    if (fatherScore < score) goodDad = false;
+
+    if ((goodDad && chance > 0.7) || (!goodDad && chance < 0.7)) {
+      child[i] = operations[i];
+    }
+  }
+  return child;
+}
+
 
 
 void Individual::act(char action, std::pair<double, double> &val) {

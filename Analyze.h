@@ -15,6 +15,7 @@ public:
   , y_min(-2.0)
   , x_max(2.0)
   , y_max(2.0)
+  , max(0)
   , height(480)
   , width(640)
   {
@@ -22,20 +23,25 @@ public:
   }
 
   int analyzePoint (double x, double y);
-  void analyzeTrainingPointsFile (void);
+  void analyzeTrainingPointsFile ();
   void addPoint (double x, double y);
+  void writeGrid ();
 
 private:
 
   std::vector<std::vector <int> > grid;
-
+  int get_r(double bias) { return (int)(((bias - 1 ) * (-1)) * 255 / 8); }
+  int get_g(double bias) { return (int)(bias * 255 / 5); }
+  int get_b(double bias) { return (int)(bias * 255); }
+  
   double  x_min
         , y_min
         , x_max
         , y_max
         ;
 
-  int height
+  int max
+    , height
     , width
     ;
 
