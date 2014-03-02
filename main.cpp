@@ -5,7 +5,12 @@
 int main () {
   Population pop;
 
-  pop.print();
+  for (int i = 0; i < 100; ++i) {
+    pop.print();
+    pop.cull();
+    pop.repopulate();
+  }
+
 
   return 0;
 }

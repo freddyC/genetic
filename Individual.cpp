@@ -18,7 +18,37 @@
   l = log
   r = square root
   v = absoulte value
+  _ = do nothing
 */
+
+Individual::Individual(std::shared_ptr<Analyze> a)
+  : score(0)
+  , operations(OPERATIONS_LENGTH)
+  , funcs({'m', 'd', 'a', 's', 'i', 'c', 't', 'o', 'p', 'l', 'r', 'v', 'M', 'D', 'A', 'S', 'I', 'C', 'T', 'O', 'P', 'L', 'R', 'V', '_'})
+  , analyzer(a)
+{
+  std::generate(operations.begin(), operations.end(), [&] () {
+    return getRandomFunction();
+  });
+}
+
+
+Individual::Individual(std::shared_ptr<Analyze> a, std::vector<char> actions)
+  : score(0)
+  , operations(actions)
+  , funcs({'m', 'd', 'a', 's', 'i', 'c', 't', 'o', 'p', 'l', 'r', 'v', 'M', 'D', 'A', 'S', 'I', 'C', 'T', 'O', 'P', 'L', 'R', 'V', '_'})
+  , analyzer(a)
+{}
+
+void Individual::setOperations (std::vector<char> v) {
+  if (v.size() != OPERATIONS_LENGTH) return;
+  for (int i = 0; i < OPERATIONS_LENGTH; ++i) {
+    operations[i] = v[i];
+  }
+}
+
+
+
 char Individual::getRandomFunction () {
   std::random_device rd;
   std::mt19937 gen(rd());
@@ -48,92 +78,52 @@ void Individual::calculateFitness () {
   }
 }
 
-///////////////////////////////////
-// TODO: fix me
-///////////////////////////////////
 int Individual::timesInBuda(std::pair<double, double> cord) {
+  return analyzer->analyzePoint(cord.first, cord.second);
+}
+
+std::vector<char> Individual::mutation () {
+  // a 10% chance of mutation
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dis(0, funcs.size() -1);
-  auto i = dis(gen);
-  return i;
+  std::uniform_real_distribution<> dis(0, 1);
+  for (int i = 0; i < operations.size(); ++i) {
+    auto chance = dis(gen);
+    if (chance < 0.9) {
+      operations[i] = getRandomFunction();
+    }
+  }
+  return operations;
 }
-///////////////////////////////////
+
 
 void Individual::act(char action, std::pair<double, double> &val) {
   switch(action) {
-    case 'm':
-      multiply_x(val);
-      break;
-    case 'M':
-      multiply_y(val);
-      break;
-    case 'd':
-      divide_x(val);
-      break;
-    case 'D':
-      divide_y(val);
-      break;
-    case 'a':
-      add_x(val);
-      break;
-    case 'A':
-      add_y(val);
-      break;
-    case 's':
-      sub_x(val);
-      break;
-    case 'S':
-      sub_y(val);
-      break;
-    case 'i':
-      sine_x(val);
-      break;
-    case 'I':
-      sine_y(val);
-      break;
-    case 'c':
-      cosine_x(val);
-      break;
-    case 'C':
-      cosine_y(val);
-      break;
-    case 't':
-      tan_x(val);
-      break;
-    case 'T':
-      tan_y(val);
-      break;
-    case 'o':
-      mod_x(val);
-      break;
-    case 'O':
-      mod_y(val);
-      break;
-    case 'p':
-      power_x(val);
-      break;
-    case 'P':
-      power_y(val);
-      break;
-    case 'l':
-      log_x(val);
-      break;
-    case 'L':
-      log_y(val);
-      break;
-    case 'r':
-      square_root_x(val);
-      break;
-    case 'R':
-      square_root_y(val);
-      break;
-    case 'v':
-      absoulte_value_x(val);
-      break;
-    case 'V':
-      absoulte_value_y(val);
-      break;
+    case 'm': multiply_x(val); break;
+    case 'M': multiply_y(val); break;
+    case 'd': divide_x(val); break;
+    case 'D': divide_y(val); break;
+    case 'a': add_x(val); break;
+    case 'A': add_y(val); break;
+    case 's': sub_x(val); break;
+    case 'S': sub_y(val); break;
+    case 'i': sine_x(val); break;
+    case 'I': sine_y(val); break;
+    case 'c': cosine_x(val); break;
+    case 'C': cosine_y(val); break;
+    case 't': tan_x(val); break;
+    case 'T': tan_y(val); break;
+    case 'o': mod_x(val); break;
+    case 'O': mod_y(val); break;
+    case 'p': power_x(val); break;
+    case 'P': power_y(val); break;
+    case 'l': log_x(val); break;
+    case 'L': log_y(val); break;
+    case 'r': square_root_x(val); break;
+    case 'R': square_root_y(val); break;
+    case 'v': absoulte_value_x(val); break;
+    case 'V': absoulte_value_y(val); break;
+    case '_': break;
   }
 }
 
