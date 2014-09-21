@@ -1,10 +1,10 @@
 ### Here was what we were given as an assignment:
  
-_Write a program that uses a genetic algorithm to find a function that approximates the buddabrot set from the first assignment.  Include a short report on the experience.  This report must include a comparison of the image produced by your genetic algorithm and the image produced by the first assignment.
+_Write a program that uses a genetic algorithm to find a function that approximates the buddabrot set from the first assignment.  Include a short report on the experience.  This report must include a comparison of the image produced by your genetic algorithm and the image produced by the first assignment._
 
  
 
-The genetic algorithm must include, mutation, crossover and migration between populations that are simulated on separate compute nodes._
+_The genetic algorithm must include, mutation, crossover and migration between populations that are simulated on separate compute nodes._
 
 It wasn't very detailed but I think I accomplished all the genetic algorithm features.
 
